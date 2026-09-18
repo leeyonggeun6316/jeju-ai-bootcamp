@@ -393,6 +393,17 @@ function selectAnswer(optionNum) {
     
     optionsBox.classList.add("hidden");
     resultBox.classList.remove("hidden");
+
+    if (isAdminActive) {
+      if (titleBox) {
+        titleBox.setAttribute("contenteditable", "true");
+        titleBox.classList.add("admin-editing-field");
+      }
+      if (descBox) {
+        descBox.setAttribute("contenteditable", "true");
+        descBox.classList.add("admin-editing-field");
+      }
+    }
   }
 }
 
@@ -577,12 +588,6 @@ function enterAdminMode() {
   const addFaqBtn = document.getElementById("admin-add-faq-btn");
   if (addFaqBtn) addFaqBtn.classList.remove("hidden");
 
-  const quizBtn = document.getElementById("admin-quiz-btn");
-  if (quizBtn) quizBtn.classList.remove("hidden");
-
-  const quizCurrentBtn = document.getElementById("admin-quiz-edit-current-btn");
-  if (quizCurrentBtn) quizCurrentBtn.classList.remove("hidden");
-
   // Show FAQ admin controls
   document.querySelectorAll(".admin-faq-controls").forEach(el => el.classList.remove("hidden"));
 
@@ -602,12 +607,6 @@ function exitAdminMode() {
 
   const addFaqBtn = document.getElementById("admin-add-faq-btn");
   if (addFaqBtn) addFaqBtn.classList.add("hidden");
-
-  const quizBtn = document.getElementById("admin-quiz-btn");
-  if (quizBtn) quizBtn.classList.add("hidden");
-
-  const quizCurrentBtn = document.getElementById("admin-quiz-edit-current-btn");
-  if (quizCurrentBtn) quizCurrentBtn.classList.add("hidden");
 
   document.querySelectorAll(".admin-faq-controls").forEach(el => el.classList.add("hidden"));
 
@@ -664,6 +663,29 @@ function saveAllEdits() {
   });
 
   localStorage.setItem("jeju_bootcamp_edits", JSON.stringify(edits));
+
+  // Also sync quiz questions & currently active result to jeju_quiz_data
+  try {
+    const quizData = getQuizData();
+    for (let i = 1; i <= 4; i++) {
+      const qEl = document.getElementById(`quiz-q-${i}-text`);
+      if (qEl && quizData[i]) {
+        quizData[i].q = qEl.textContent.trim();
+      }
+    }
+    const resTitleEl = document.getElementById("quiz-result-title");
+    const resDescEl = document.getElementById("quiz-result-desc");
+    if (resTitleEl && resDescEl && quizData[currentSelectedQuizOption]) {
+      const tText = resTitleEl.textContent.trim();
+      const dText = resDescEl.textContent.trim();
+      if (tText) quizData[currentSelectedQuizOption].title = tText;
+      if (dText) quizData[currentSelectedQuizOption].desc = dText;
+    }
+    localStorage.setItem("jeju_quiz_data", JSON.stringify(quizData));
+  } catch (e) {
+    console.error("Failed to sync quiz data", e);
+  }
+
   showToast("💾 모든 수정사항이 브라우저에 안전하게 저장되었습니다!");
 }
 
