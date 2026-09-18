@@ -687,21 +687,95 @@ function saveAllEdits() {
   }
 
   showToast("💾 모든 수정사항이 브라우저에 안전하게 저장되었습니다!");
+
+  // 백그라운드로 전 세계 실시간 배포 시도 (자동 동기화)
+  publishToWorld(true);
 }
 
-function loadSavedEdits() {
+async function publishToWorld(silent = false) {
+  const edits = {};
+  document.querySelectorAll("[data-editable]").forEach(el => {
+    const key = el.getAttribute("data-editable");
+    edits[key] = el.innerHTML;
+  });
+
+  const payload = {
+    edits: edits,
+    site_apply_url: getApplyUrl(),
+    header_btn_text: getHeaderBtnText(),
+    hero_btn_text: getHeroBtnText(),
+    quiz_data: getQuizData(),
+    faqs: getStoredFaqs(),
+    updated_at: new Date().toISOString()
+  };
+
+  if (!silent) {
+    showToast("⏳ 전 세계 웹사이트(GitHub Pages)로 배포 중입니다...");
+  }
+
+  try {
+    const res = await fetch("http://127.0.0.1:8765/api/sync", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast("🚀 전 세계 웹사이트에 즉시 배포되었습니다! (30초 후 다른 기기/팀장님 화면에 자동 반영)");
+    } else {
+      if (!silent) showToast("⚠️ 자동 배포 실패: " + (data.error || "알 수 없는 오류"));
+    }
+  } catch (err) {
+    if (!silent) {
+      showToast("💡 로컬 동기화 브릿지 연결 중... [수정본 HTML 내보내기]로 안전하게 다운로드됩니다.");
+      exportUpdatedHtml();
+    }
+  }
+}
+
+async function loadSavedEdits() {
+  // 1. 로컬 저장소 우선 로드 (즉시 표시)
   try {
     const saved = localStorage.getItem("jeju_bootcamp_edits");
-    if (!saved) return;
-    const edits = JSON.parse(saved);
-    Object.keys(edits).forEach(key => {
-      const el = document.querySelector(`[data-editable="${key}"]`);
-      if (el) {
-        el.innerHTML = edits[key];
-      }
-    });
+    if (saved) {
+      const edits = JSON.parse(saved);
+      Object.keys(edits).forEach(key => {
+        const el = document.querySelector(`[data-editable="${key}"]`);
+        if (el) el.innerHTML = edits[key];
+      });
+    }
   } catch (err) {
-    console.error("Error loading saved edits:", err);
+    console.error("Local edits load error:", err);
+  }
+
+  // 2. 서버/GitHub Pages의 최신 원격 site_data.json 동기화
+  try {
+    const res = await fetch("site_data.json?v=" + Date.now());
+    if (res.ok) {
+      const remote = await res.json();
+      if (remote && remote.edits && Object.keys(remote.edits).length > 0) {
+        Object.keys(remote.edits).forEach(key => {
+          const el = document.querySelector(`[data-editable="${key}"]`);
+          if (el) el.innerHTML = remote.edits[key];
+        });
+        localStorage.setItem("jeju_bootcamp_edits", JSON.stringify(remote.edits));
+      }
+      if (remote.site_apply_url) {
+        localStorage.setItem("jeju_apply_url", remote.site_apply_url);
+        if (remote.header_btn_text) localStorage.setItem("jeju_header_btn_text", remote.header_btn_text);
+        if (remote.hero_btn_text) localStorage.setItem("jeju_apply_btn_text", remote.hero_btn_text);
+        applySavedLinkSettings();
+      }
+      if (remote.quiz_data) {
+        localStorage.setItem("jeju_quiz_data", JSON.stringify(remote.quiz_data));
+      }
+      if (remote.faqs && remote.faqs.length > 0) {
+        localStorage.setItem("jeju_bootcamp_faqs", JSON.stringify(remote.faqs));
+        renderFaqs();
+      }
+    }
+  } catch (netErr) {
+    console.log("Using local offline edits.");
   }
 }
 
@@ -1115,6 +1189,7 @@ window.openChangePwModal = openChangePwModal;
 window.closeChangePwModal = closeChangePwModal;
 window.handleAdminChangePassword = handleAdminChangePassword;
 window.saveAllEdits = saveAllEdits;
+window.publishToWorld = publishToWorld;
 window.exportUpdatedHtml = exportUpdatedHtml;
 window.openAddFaqModal = openAddFaqModal;
 window.editFaqItem = editFaqItem;

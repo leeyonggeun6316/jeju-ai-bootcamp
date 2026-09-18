@@ -72,7 +72,7 @@
 
         <!-- 3. MegazoneSoft -->
         <div class="flex items-center flex-shrink-0">
-          <img src="assets/logo_megazone.png" alt="메가존소프트" style="height: 42px; max-height: 42px;" class="w-auto object-contain">
+          <img src="assets/logo_megazone.png" alt="메가존소프트" style="height: 38px; max-height: 38px;" class="w-auto object-contain">
         </div>
 
         <div class="h-4 w-px bg-brand-border flex-shrink-0"></div>
@@ -713,7 +713,7 @@
         <img src="assets/logo_google_cloud.svg" alt="Google Cloud" style="height: 20px; max-height: 20px;" class="w-auto object-contain">
 
         <!-- 3. 메가존소프트 -->
-        <img src="assets/logo_megazone.png" alt="메가존소프트" style="height: 36px; max-height: 36px;" class="w-auto object-contain">
+        <img src="assets/logo_megazone.png" alt="메가존소프트" style="height: 32px; max-height: 32px;" class="w-auto object-contain">
 
         <!-- 4. (주)아이코어이앤씨 -->
         <img src="assets/logo_icore_fullcolor.png" alt="아이코어이앤씨" style="height: 20px; max-height: 20px;" class="w-auto object-contain">
@@ -749,7 +749,13 @@
         <span>수정사항 저장</span>
       </button>
 
-      <button onclick="openLinkModal()" class="px-3 py-1.5 rounded bg-indigo-600 hover:bg-indigo-500 font-semibold text-white transition flex items-center gap-1.5 shadow-sm">
+      <!-- 실시간 클라우드 자동 동기화 배포 버튼 -->
+      <button onclick="publishToWorld()" class="px-3.5 py-1.5 rounded bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 font-bold text-white transition flex items-center gap-1.5 shadow-md animate-pulse">
+        <i class="fa-solid fa-cloud-arrow-up text-xs"></i>
+        <span>🚀 전세계 웹 실시간 배포</span>
+      </button>
+
+      <button onclick="openLinkModal()" class="px-3 py-1.5 rounded bg-neutral-800 hover:bg-neutral-700 font-medium text-white transition flex items-center gap-1.5 shadow-sm">
         <i class="fa-solid fa-link text-xs"></i>
         <span>신청 링크(URL) 변경</span>
       </button>
@@ -973,6 +979,6 @@
   </div>
 
   <!-- Custom Script with Cache Busting -->
-  <script src="script.js?v=20260918_v8"></script>
+  <script src="script.js?v=20260918_v9"></script>
 </body>
 </html>
