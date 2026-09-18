@@ -321,35 +321,75 @@ function initSlider() {
   }
 }
 
-// ==================== 4. TRACK SELF-DIAGNOSIS LOGIC ====================
-const trackRecommendations = {
+// ==================== 4. TRACK SELF-DIAGNOSIS LOGIC & CMS ====================
+const defaultQuizData = {
   1: {
+    q: "🌱 코딩을 전혀 배운 적 없고, 터미널 설치가 두렵다 (실무 비서 AI부터)",
     title: "Stage 01 · 초급 트랙 추천",
     desc: "코딩 걱정 없이 100% 웹 브라우저(Zero-Setup)에서 구글 워크스페이스 AI 봇을 제작하고, 출석만 해도 60만 원 전액 장학금과 메가존클라우드 공식 추천서를 획득하세요."
   },
   2: {
+    q: "⚡ 챗GPT는 써봤다. 이력서에 들어갈 상용 AI 웹 서비스를 만들고 싶다",
     title: "Stage 02 · 중급 트랙 추천",
     desc: "AI 환각을 차단하는 5대 실무 메타인지를 체득하고, 이력서에 바로 기재 가능한 상용 배포 URL 웹프로덕트 완성 + 90만 원 장학금과 성산 합숙 우선 선발권을 받으세요."
   },
   3: {
+    q: "🚀 2주 무료 호텔 합숙과 총 500만원 해커톤 상금 피칭을 노린다",
     title: "Stage 03 · 고급 트랙 추천",
     desc: "성산 플레이스 캠프 호텔 2주 1인 1실 전액 무료 합숙! GCP 엔터프라이즈 멀티에이전트 구축 및 48시간 해커톤 총 500만 원 상금에 도전하세요."
   },
   4: {
+    q: "🔥 기초부터 차근차근 배워서 출석 장학금 최대 270만원을 전액 다 챙기고 싶다",
     title: "Full Track · 올인원 완주 추천",
     desc: "기초부터 엔터프라이즈 호텔 합숙까지 2개월 만에 완성하는 압도적 커리어 로드맵! 출석 장학금 최대 270만 원 전액 지급과 27개 기업 채용 매칭 기회를 잡으세요."
   }
 };
 
+let currentSelectedQuizOption = 1;
+let currentQuizWorkingData = null;
+
+function getQuizData() {
+  try {
+    const saved = localStorage.getItem("jeju_quiz_data");
+    if (saved) return JSON.parse(saved);
+  } catch (e) {
+    console.error("Failed to parse saved quiz data", e);
+  }
+  return JSON.parse(JSON.stringify(defaultQuizData));
+}
+
+function renderQuizFromData() {
+  const data = getQuizData();
+  for (let i = 1; i <= 4; i++) {
+    const el = document.getElementById(`quiz-q-${i}-text`);
+    if (el && data[i]) {
+      el.textContent = data[i].q;
+    }
+  }
+
+  // If result is currently visible, update result text as well
+  const resultBox = document.getElementById("quiz-result");
+  if (resultBox && !resultBox.classList.contains("hidden")) {
+    const titleBox = document.getElementById("quiz-result-title");
+    const descBox = document.getElementById("quiz-result-desc");
+    if (data[currentSelectedQuizOption]) {
+      if (titleBox) titleBox.textContent = data[currentSelectedQuizOption].title;
+      if (descBox) descBox.textContent = data[currentSelectedQuizOption].desc;
+    }
+  }
+}
+
 function selectAnswer(optionNum) {
+  currentSelectedQuizOption = optionNum;
   const resultBox = document.getElementById("quiz-result");
   const titleBox = document.getElementById("quiz-result-title");
   const descBox = document.getElementById("quiz-result-desc");
   const optionsBox = document.getElementById("quiz-options");
+  const data = getQuizData();
 
-  if (trackRecommendations[optionNum]) {
-    titleBox.textContent = trackRecommendations[optionNum].title;
-    descBox.textContent = trackRecommendations[optionNum].desc;
+  if (data[optionNum]) {
+    titleBox.textContent = data[optionNum].title;
+    descBox.textContent = data[optionNum].desc;
     
     optionsBox.classList.add("hidden");
     resultBox.classList.remove("hidden");
@@ -362,6 +402,77 @@ function resetQuiz() {
 
   resultBox.classList.add("hidden");
   optionsBox.classList.remove("hidden");
+}
+
+function openQuizModal(initialTab = 1) {
+  currentQuizWorkingData = getQuizData();
+  const modal = document.getElementById("admin-quiz-modal");
+  if (modal) {
+    modal.style.display = "flex";
+    switchQuizTab(initialTab);
+  }
+}
+
+function openQuizModalForCurrent() {
+  openQuizModal(currentSelectedQuizOption || 1);
+}
+
+function closeQuizModal() {
+  const modal = document.getElementById("admin-quiz-modal");
+  if (modal) modal.style.display = "none";
+}
+
+function switchQuizTab(newTab) {
+  const currentTabInput = document.getElementById("admin-quiz-current-tab");
+  const prevTab = parseInt(currentTabInput.value, 10);
+
+  // Save current tab inputs to working data
+  if (currentQuizWorkingData && currentQuizWorkingData[prevTab]) {
+    const qInput = document.getElementById("admin-quiz-q-input");
+    const titleInput = document.getElementById("admin-quiz-title-input");
+    const descInput = document.getElementById("admin-quiz-desc-input");
+    if (qInput && titleInput && descInput) {
+      currentQuizWorkingData[prevTab].q = qInput.value.trim();
+      currentQuizWorkingData[prevTab].title = titleInput.value.trim();
+      currentQuizWorkingData[prevTab].desc = descInput.value.trim();
+    }
+  }
+
+  // Update tab buttons style
+  document.querySelectorAll(".quiz-tab-btn").forEach((btn, idx) => {
+    const tabNum = idx + 1;
+    if (tabNum === newTab) {
+      btn.className = "quiz-tab-btn flex-1 py-2 text-xs font-semibold text-center rounded-t-lg transition border-b-2 border-purple-600 text-purple-600 bg-purple-50/50";
+    } else {
+      btn.className = "quiz-tab-btn flex-1 py-2 text-xs font-semibold text-center rounded-t-lg transition text-neutral-500 hover:text-neutral-800";
+    }
+  });
+
+  currentTabInput.value = newTab;
+  const tabLabel = document.getElementById("quiz-tab-label");
+  if (tabLabel) tabLabel.textContent = `[문항 ${newTab}]`;
+
+  // Populate inputs with new tab data
+  if (currentQuizWorkingData && currentQuizWorkingData[newTab]) {
+    document.getElementById("admin-quiz-q-input").value = currentQuizWorkingData[newTab].q;
+    document.getElementById("admin-quiz-title-input").value = currentQuizWorkingData[newTab].title;
+    document.getElementById("admin-quiz-desc-input").value = currentQuizWorkingData[newTab].desc;
+  }
+}
+
+function handleSaveQuizData(e) {
+  e.preventDefault();
+  const currentTab = parseInt(document.getElementById("admin-quiz-current-tab").value, 10);
+  if (currentQuizWorkingData && currentQuizWorkingData[currentTab]) {
+    currentQuizWorkingData[currentTab].q = document.getElementById("admin-quiz-q-input").value.trim();
+    currentQuizWorkingData[currentTab].title = document.getElementById("admin-quiz-title-input").value.trim();
+    currentQuizWorkingData[currentTab].desc = document.getElementById("admin-quiz-desc-input").value.trim();
+  }
+
+  localStorage.setItem("jeju_quiz_data", JSON.stringify(currentQuizWorkingData));
+  renderQuizFromData();
+  closeQuizModal();
+  showToast("🧩 자가진단 퀴즈 문항 및 추천 결과가 성공적으로 저장되었습니다!");
 }
 
 // ==================== 5. MINIMALIST FAQ ACCORDION TOGGLE ====================
@@ -466,6 +577,12 @@ function enterAdminMode() {
   const addFaqBtn = document.getElementById("admin-add-faq-btn");
   if (addFaqBtn) addFaqBtn.classList.remove("hidden");
 
+  const quizBtn = document.getElementById("admin-quiz-btn");
+  if (quizBtn) quizBtn.classList.remove("hidden");
+
+  const quizCurrentBtn = document.getElementById("admin-quiz-edit-current-btn");
+  if (quizCurrentBtn) quizCurrentBtn.classList.remove("hidden");
+
   // Show FAQ admin controls
   document.querySelectorAll(".admin-faq-controls").forEach(el => el.classList.remove("hidden"));
 
@@ -485,6 +602,12 @@ function exitAdminMode() {
 
   const addFaqBtn = document.getElementById("admin-add-faq-btn");
   if (addFaqBtn) addFaqBtn.classList.add("hidden");
+
+  const quizBtn = document.getElementById("admin-quiz-btn");
+  if (quizBtn) quizBtn.classList.add("hidden");
+
+  const quizCurrentBtn = document.getElementById("admin-quiz-edit-current-btn");
+  if (quizCurrentBtn) quizCurrentBtn.classList.add("hidden");
 
   document.querySelectorAll(".admin-faq-controls").forEach(el => el.classList.add("hidden"));
 
@@ -827,6 +950,12 @@ window.openLinkModal = openLinkModal;
 window.closeLinkModal = closeLinkModal;
 window.handleSaveApplyLink = handleSaveApplyLink;
 window.handleApplyClick = handleApplyClick;
+window.openQuizModal = openQuizModal;
+window.openQuizModalForCurrent = openQuizModalForCurrent;
+window.closeQuizModal = closeQuizModal;
+window.switchQuizTab = switchQuizTab;
+window.handleSaveQuizData = handleSaveQuizData;
+window.renderQuizFromData = renderQuizFromData;
 
 // Initialize All Systems
 document.addEventListener("DOMContentLoaded", () => {
@@ -834,6 +963,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initCountdown();
   initSlider();
   renderFaqs();
+  renderQuizFromData();
   loadSavedEdits();
   applySavedLinkSettings();
 });
