@@ -695,6 +695,75 @@ function showToast(msg) {
   }, 3200);
 }
 
+// ==================== 7. GOOGLE FORM APPLY LINK MANAGEMENT ====================
+function getApplyUrl() {
+  return localStorage.getItem("jeju_apply_url") || "https://forms.google.com";
+}
+
+function getApplyText() {
+  return localStorage.getItem("jeju_apply_btn_text") || "구글 폼으로 지원서 작성하기";
+}
+
+function openLinkModal() {
+  const modal = document.getElementById("admin-link-modal");
+  const urlInput = document.getElementById("admin-form-url-input");
+  const textInput = document.getElementById("admin-form-text-input");
+  if (modal) {
+    modal.style.display = "flex";
+    if (urlInput) urlInput.value = getApplyUrl();
+    if (textInput) textInput.value = getApplyText();
+    setTimeout(() => urlInput && urlInput.focus(), 100);
+  }
+}
+
+function closeLinkModal() {
+  const modal = document.getElementById("admin-link-modal");
+  if (modal) modal.style.display = "none";
+}
+
+function handleSaveApplyLink(e) {
+  e.preventDefault();
+  const urlInput = document.getElementById("admin-form-url-input");
+  const textInput = document.getElementById("admin-form-text-input");
+
+  const newUrl = urlInput.value.trim();
+  const newText = textInput.value.trim();
+
+  if (newUrl) localStorage.setItem("jeju_apply_url", newUrl);
+  if (newText) localStorage.setItem("jeju_apply_btn_text", newText);
+
+  applySavedLinkSettings();
+  closeLinkModal();
+  showToast("🔗 구글 폼 신청 링크와 버튼 문구가 성공적으로 적용되었습니다!");
+}
+
+function applySavedLinkSettings() {
+  const url = getApplyUrl();
+  const text = getApplyText();
+
+  // Update all apply buttons href
+  document.querySelectorAll(".apply-btn-link").forEach(btn => {
+    btn.setAttribute("href", url);
+  });
+
+  // Update hero button text
+  const heroBtnText = document.querySelector(".apply-hero-btn-text");
+  if (heroBtnText) {
+    heroBtnText.textContent = text;
+  }
+}
+
+function handleApplyClick(e) {
+  if (isAdminActive) {
+    e.preventDefault();
+    openLinkModal();
+  } else {
+    // Normal user: proceed to the target URL
+    const url = getApplyUrl();
+    e.currentTarget.setAttribute("href", url);
+  }
+}
+
 // Keyboard Shortcuts: Alt + A, Ctrl + Shift + E, Ctrl + Shift + A
 document.addEventListener("keydown", (e) => {
   const isAltA = e.altKey && (e.key === "a" || e.key === "A" || e.code === "KeyA");
@@ -727,6 +796,10 @@ window.editFaqItem = editFaqItem;
 window.deleteFaqItem = deleteFaqItem;
 window.closeFaqModal = closeFaqModal;
 window.handleSaveFaq = handleSaveFaq;
+window.openLinkModal = openLinkModal;
+window.closeLinkModal = closeLinkModal;
+window.handleSaveApplyLink = handleSaveApplyLink;
+window.handleApplyClick = handleApplyClick;
 
 // Initialize All Systems
 document.addEventListener("DOMContentLoaded", () => {
@@ -735,5 +808,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initSlider();
   renderFaqs();
   loadSavedEdits();
+  applySavedLinkSettings();
 });
+
 

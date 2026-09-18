@@ -100,9 +100,9 @@
 
       <!-- Primary Antigravity Pill Button -->
       <div>
-        <a href="https://forms.google.com" target="_blank" rel="noopener noreferrer" 
-           class="inline-flex items-center justify-center px-6 py-2.5 text-xs sm:text-sm font-medium text-white bg-brand-black hover:bg-neutral-800 rounded-full shadow-sm hover:shadow-md transition-all">
-          <span>수강신청하기</span>
+        <a href="https://forms.google.com" target="_blank" rel="noopener noreferrer" onclick="handleApplyClick(event)"
+           class="apply-btn-link inline-flex items-center justify-center px-6 py-2.5 text-xs sm:text-sm font-medium text-white bg-brand-black hover:bg-neutral-800 rounded-full shadow-sm hover:shadow-md transition-all">
+          <span class="apply-btn-text">수강신청하기</span>
           <i class="fa-solid fa-arrow-up-right-from-square ml-2 text-[11px] opacity-70"></i>
         </a>
       </div>
@@ -144,9 +144,9 @@
 
       <!-- Antigravity CTA Button Pair -->
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
-        <a href="https://forms.google.com" target="_blank" rel="noopener noreferrer" 
-           class="w-full sm:w-auto px-8 py-4 text-sm sm:text-base font-semibold text-white bg-brand-black hover:bg-neutral-800 rounded-full transition-all shadow-sm hover:shadow-lg hover:-translate-y-0.5">
-          <span data-editable="hero-cta-btn">구글 폼으로 지원서 작성하기</span>
+        <a href="https://forms.google.com" target="_blank" rel="noopener noreferrer" onclick="handleApplyClick(event)"
+           class="apply-btn-link w-full sm:w-auto px-8 py-4 text-sm sm:text-base font-semibold text-white bg-brand-black hover:bg-neutral-800 rounded-full transition-all shadow-sm hover:shadow-lg hover:-translate-y-0.5">
+          <span data-editable="hero-cta-btn" class="apply-hero-btn-text">구글 폼으로 지원서 작성하기</span>
           <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
         </a>
         <a href="#quiz" 
@@ -752,6 +752,11 @@
     </div>
     
     <div class="flex items-center gap-2">
+      <button onclick="openLinkModal()" class="px-3 py-1.5 rounded bg-indigo-600 hover:bg-indigo-500 font-semibold text-white transition flex items-center gap-1.5 shadow-sm">
+        <i class="fa-solid fa-link text-xs"></i>
+        <span>신청 링크(URL) 변경</span>
+      </button>
+
       <button onclick="saveAllEdits()" class="px-3 py-1.5 rounded bg-emerald-600 hover:bg-emerald-500 font-semibold text-white transition flex items-center gap-1.5 shadow-sm">
         <i class="fa-solid fa-floppy-disk text-xs"></i>
         <span>수정사항 저장</span>
@@ -845,7 +850,46 @@
     </div>
   </div>
 
+  <!-- ==================== ADMIN APPLY LINK MODAL ==================== -->
+  <div id="admin-link-modal" style="display: none;" class="fixed inset-0 z-[110] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-brand-border">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-9 h-9 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center">
+          <i class="fa-solid fa-link text-sm"></i>
+        </div>
+        <div>
+          <h3 class="font-bold text-brand-black text-base">신청 링크 및 버튼 문구 변경</h3>
+          <p class="text-xs text-brand-muted">구글 폼 URL과 버튼 텍스트를 수정하세요</p>
+        </div>
+      </div>
+
+      <form onsubmit="handleSaveApplyLink(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-brand-black mb-1">구글 폼 신청서 링크 (URL)</label>
+          <input type="url" id="admin-form-url-input" placeholder="https://forms.gle/..." 
+                 class="w-full px-4 py-2.5 text-xs sm:text-sm rounded-xl border border-brand-border focus:border-brand-blue focus:outline-none focus:ring-1 focus:ring-brand-blue font-mono" required>
+          <p class="text-[11px] text-brand-muted mt-1">헤더 및 메인 화면의 모든 '수강신청' 버튼이 이 링크로 연결됩니다.</p>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-brand-black mb-1">메인 버튼 표시 문구</label>
+          <input type="text" id="admin-form-text-input" placeholder="예: 구글 폼으로 지원서 작성하기" 
+                 class="w-full px-4 py-2.5 text-xs sm:text-sm rounded-xl border border-brand-border focus:border-brand-blue focus:outline-none focus:ring-1 focus:ring-brand-blue" required>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2">
+          <button type="button" onclick="closeLinkModal()" class="px-4 py-2 text-xs font-medium text-brand-muted hover:text-brand-black rounded-lg">
+            취소
+          </button>
+          <button type="submit" class="px-5 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg shadow-sm">
+            저장 및 적용
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Custom Script with Cache Busting -->
-  <script src="script.js?v=20260918_v3"></script>
+  <script src="script.js?v=20260918_v4"></script>
 </body>
 </html>
