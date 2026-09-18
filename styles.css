@@ -1,0 +1,39 @@
+/* Google Antigravity Design System Polish */
+
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght@0,400..700;1,400..700&family=Google+Sans+Flex:opsz,wght@8..144,300..800&display=swap');
+
+body {
+  font-family: "Google Sans Flex", "Pretendard", -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: -0.015em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Subtle Antigravity Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D1D5DB;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9CA3AF;
+}
+
+/* Antigravity Minimalist Accordion Transition */
+.faq-answer {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Smooth Focus */
+button:focus-visible, a:focus-visible {
+  outline: 2px solid #111318;
+  outline-offset: 2px;
+}
