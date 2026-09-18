@@ -693,6 +693,12 @@ function saveAllEdits() {
 }
 
 async function publishToWorld(silent = false) {
+  // 1. 임시로 관리자 오버레이를 닫고 깨끗한 HTML 추출
+  const wasAdmin = isAdminActive;
+  if (wasAdmin) exitAdminMode();
+  const bakedHtml = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+  if (wasAdmin) enterAdminMode();
+
   const edits = {};
   document.querySelectorAll("[data-editable]").forEach(el => {
     const key = el.getAttribute("data-editable");
@@ -700,6 +706,7 @@ async function publishToWorld(silent = false) {
   });
 
   const payload = {
+    html: bakedHtml,
     edits: edits,
     site_apply_url: getApplyUrl(),
     header_btn_text: getHeaderBtnText(),
@@ -710,18 +717,18 @@ async function publishToWorld(silent = false) {
   };
 
   if (!silent) {
-    showToast("⏳ 전 세계 웹사이트(GitHub Pages)로 배포 중입니다...");
+    showToast("⏳ 전 세계 웹사이트(GitHub Pages)로 즉시 배포 중...");
   }
 
   try {
     const res = await fetch("http://127.0.0.1:8765/api/sync", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json; charset=utf-8" },
       body: JSON.stringify(payload)
     });
     const data = await res.json();
     if (data.success) {
-      showToast("🚀 전 세계 웹사이트에 즉시 배포되었습니다! (30초 후 다른 기기/팀장님 화면에 자동 반영)");
+      showToast("🚀 전 세계 웹사이트에 즉시 배포 완료! (잠시 후 다른 기기에서 새로고침 시 바로 반영)");
     } else {
       if (!silent) showToast("⚠️ 자동 배포 실패: " + (data.error || "알 수 없는 오류"));
     }
