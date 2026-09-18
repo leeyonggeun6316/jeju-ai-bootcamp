@@ -700,19 +700,37 @@ function getApplyUrl() {
   return localStorage.getItem("jeju_apply_url") || "https://forms.google.com";
 }
 
-function getApplyText() {
+function getHeaderBtnText() {
+  return localStorage.getItem("jeju_header_btn_text") || "수강신청하기";
+}
+
+function getHeroBtnText() {
   return localStorage.getItem("jeju_apply_btn_text") || "구글 폼으로 지원서 작성하기";
 }
 
-function openLinkModal() {
+function openLinkModal(target = "general") {
   const modal = document.getElementById("admin-link-modal");
+  const title = document.getElementById("admin-link-modal-title");
   const urlInput = document.getElementById("admin-form-url-input");
-  const textInput = document.getElementById("admin-form-text-input");
+  const headerInput = document.getElementById("admin-header-text-input");
+  const heroInput = document.getElementById("admin-hero-text-input");
+
   if (modal) {
     modal.style.display = "flex";
     if (urlInput) urlInput.value = getApplyUrl();
-    if (textInput) textInput.value = getApplyText();
-    setTimeout(() => urlInput && urlInput.focus(), 100);
+    if (headerInput) headerInput.value = getHeaderBtnText();
+    if (heroInput) heroInput.value = getHeroBtnText();
+
+    if (target === "header") {
+      if (title) title.textContent = "상단 [수강신청하기] 버튼 및 신청 링크 수정";
+      setTimeout(() => headerInput && headerInput.focus(), 100);
+    } else if (target === "hero") {
+      if (title) title.textContent = "메인 [구글 폼 지원서] 버튼 및 신청 링크 수정";
+      setTimeout(() => heroInput && heroInput.focus(), 100);
+    } else {
+      if (title) title.textContent = "신청 링크 및 버튼 문구 변경";
+      setTimeout(() => urlInput && urlInput.focus(), 100);
+    }
   }
 }
 
@@ -724,39 +742,48 @@ function closeLinkModal() {
 function handleSaveApplyLink(e) {
   e.preventDefault();
   const urlInput = document.getElementById("admin-form-url-input");
-  const textInput = document.getElementById("admin-form-text-input");
+  const headerInput = document.getElementById("admin-header-text-input");
+  const heroInput = document.getElementById("admin-hero-text-input");
 
   const newUrl = urlInput.value.trim();
-  const newText = textInput.value.trim();
+  const newHeader = headerInput.value.trim();
+  const newHero = heroInput.value.trim();
 
   if (newUrl) localStorage.setItem("jeju_apply_url", newUrl);
-  if (newText) localStorage.setItem("jeju_apply_btn_text", newText);
+  if (newHeader) localStorage.setItem("jeju_header_btn_text", newHeader);
+  if (newHero) localStorage.setItem("jeju_apply_btn_text", newHero);
 
   applySavedLinkSettings();
   closeLinkModal();
-  showToast("🔗 구글 폼 신청 링크와 버튼 문구가 성공적으로 적용되었습니다!");
+  showToast("🔗 구글 폼 링크와 버튼 글자(헤더/메인)가 모두 저장되었습니다!");
 }
 
 function applySavedLinkSettings() {
   const url = getApplyUrl();
-  const text = getApplyText();
+  const headerText = getHeaderBtnText();
+  const heroText = getHeroBtnText();
 
   // Update all apply buttons href
   document.querySelectorAll(".apply-btn-link").forEach(btn => {
     btn.setAttribute("href", url);
   });
 
+  // Update header button text
+  document.querySelectorAll(".apply-btn-text").forEach(el => {
+    el.textContent = headerText;
+  });
+
   // Update hero button text
   const heroBtnText = document.querySelector(".apply-hero-btn-text");
   if (heroBtnText) {
-    heroBtnText.textContent = text;
+    heroBtnText.textContent = heroText;
   }
 }
 
-function handleApplyClick(e) {
+function handleApplyClick(e, target = "hero") {
   if (isAdminActive) {
     e.preventDefault();
-    openLinkModal();
+    openLinkModal(target);
   } else {
     // Normal user: proceed to the target URL
     const url = getApplyUrl();
