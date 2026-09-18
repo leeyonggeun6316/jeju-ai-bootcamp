@@ -125,19 +125,19 @@
       <!-- Monospace Pill Tag -->
       <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-brand-border shadow-sm mb-8">
         <span class="w-2 h-2 rounded-full bg-brand-blue animate-pulse"></span>
-        <span class="text-xs font-mono uppercase tracking-widest text-brand-muted font-medium">
+        <span data-editable="hero-tag" class="text-xs font-mono uppercase tracking-widest text-brand-muted font-medium">
           Jeju Youth Liftoff Program · 2026
         </span>
       </div>
 
       <!-- Main Headline -->
-      <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-[-0.04em] text-brand-black leading-[1.1] mb-8">
+      <h1 data-editable="hero-h1" class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-[-0.04em] text-brand-black leading-[1.1] mb-8">
         챗GPT 자소서 복붙 그만. <br class="hidden sm:inline"/>
         진짜 작동하는 <span class="underline decoration-brand-blue decoration-wavy decoration-2 underline-offset-8">나만의 AI 무기</span>를 장전하세요.
       </h1>
 
       <!-- Subtitle -->
-      <p class="text-base sm:text-xl text-brand-muted max-w-2xl mx-auto font-normal leading-relaxed mb-12">
+      <p data-editable="hero-sub" class="text-base sm:text-xl text-brand-muted max-w-2xl mx-auto font-normal leading-relaxed mb-12">
         설치 스트레스 0건(Zero-Setup)의 브라우저 GUI 실습부터,<br class="hidden sm:inline"/>
         성산 2주 호텔 무료 합숙과 실전 상용 배포 URL 완성까지 단숨에 도약합니다.
       </p>
@@ -146,12 +146,12 @@
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
         <a href="https://forms.google.com" target="_blank" rel="noopener noreferrer" 
            class="w-full sm:w-auto px-8 py-4 text-sm sm:text-base font-semibold text-white bg-brand-black hover:bg-neutral-800 rounded-full transition-all shadow-sm hover:shadow-lg hover:-translate-y-0.5">
-          <span>구글 폼으로 지원서 작성하기</span>
+          <span data-editable="hero-cta-btn">구글 폼으로 지원서 작성하기</span>
           <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
         </a>
         <a href="#quiz" 
            class="w-full sm:w-auto px-7 py-4 text-sm sm:text-base font-semibold text-brand-charcoal bg-white border border-brand-border hover:border-neutral-400 rounded-full transition-all hover:bg-neutral-50">
-          <span>30초 트랙 자가진단</span>
+          <span data-editable="hero-quiz-btn">30초 트랙 자가진단</span>
         </a>
       </div>
 
@@ -160,26 +160,26 @@
         
         <div class="bg-white p-6 text-center">
           <div class="text-xs font-mono text-brand-muted mb-1 uppercase tracking-wider">Scholarship</div>
-          <div class="text-2xl sm:text-3xl font-extrabold text-brand-black">최대 270만</div>
-          <div class="text-xs text-brand-blue font-semibold mt-1">출석만 해도 전액 지급</div>
+          <div data-editable="metric-1-val" class="text-2xl sm:text-3xl font-extrabold text-brand-black">최대 270만</div>
+          <div data-editable="metric-1-sub" class="text-xs text-brand-blue font-semibold mt-1">출석만 해도 전액 지급</div>
         </div>
 
         <div class="bg-white p-6 text-center">
           <div class="text-xs font-mono text-brand-muted mb-1 uppercase tracking-wider">Hotel Camp</div>
-          <div class="text-2xl sm:text-3xl font-extrabold text-brand-black">2주 무료합숙</div>
-          <div class="text-xs text-brand-muted mt-1">성산 플레이스 1인 1실</div>
+          <div data-editable="metric-2-val" class="text-2xl sm:text-3xl font-extrabold text-brand-black">2주 무료합숙</div>
+          <div data-editable="metric-2-sub" class="text-xs text-brand-muted mt-1">성산 플레이스 1인 1실</div>
         </div>
 
         <div class="bg-white p-6 text-center">
           <div class="text-xs font-mono text-brand-muted mb-1 uppercase tracking-wider">Hackathon</div>
-          <div class="text-2xl sm:text-3xl font-extrabold text-brand-black">총 500만 원</div>
-          <div class="text-xs text-brand-muted mt-1">48시간 논스톱 몰입</div>
+          <div data-editable="metric-3-val" class="text-2xl sm:text-3xl font-extrabold text-brand-black">총 500만 원</div>
+          <div data-editable="metric-3-sub" class="text-xs text-brand-muted mt-1">48시간 논스톱 몰입</div>
         </div>
 
         <div class="bg-white p-6 text-center">
           <div class="text-xs font-mono text-brand-muted mb-1 uppercase tracking-wider">Tuition Fee</div>
-          <div class="text-2xl sm:text-3xl font-extrabold text-brand-black">100% 국비무료</div>
-          <div class="text-xs text-brand-muted mt-1">수강료 및 식사 전액 지원</div>
+          <div data-editable="metric-4-val" class="text-2xl sm:text-3xl font-extrabold text-brand-black">100% 국비무료</div>
+          <div data-editable="metric-4-sub" class="text-xs text-brand-muted mt-1">수강료 및 식사 전액 지원</div>
         </div>
 
       </div>
@@ -584,50 +584,82 @@
   <section id="faq" class="py-24 bg-[#FCFCFC] border-t border-brand-border/70">
     <div class="max-w-3xl mx-auto px-6">
       
-      <div class="text-center mb-16">
-        <span class="text-xs font-mono uppercase tracking-widest text-brand-blue font-semibold mb-2 block">FAQ</span>
-        <h2 class="text-3xl font-extrabold tracking-tight text-brand-black">자주 묻는 질문</h2>
+      <div class="flex items-center justify-between mb-12">
+        <div class="text-left">
+          <span class="text-xs font-mono uppercase tracking-widest text-brand-blue font-semibold mb-2 block">FAQ</span>
+          <h2 data-editable="faq-title" class="text-3xl font-extrabold tracking-tight text-brand-black">자주 묻는 질문</h2>
+        </div>
+
+        <!-- Add FAQ Button (Visible in Admin Mode) -->
+        <button id="admin-add-faq-btn" onclick="openAddFaqModal()" class="hidden px-4 py-2 rounded-full bg-brand-blue hover:bg-blue-600 text-white text-xs font-semibold shadow-sm transition flex items-center gap-1.5">
+          <i class="fa-solid fa-plus text-xs"></i>
+          <span>새 질문 추가</span>
+        </button>
       </div>
 
-      <div class="divide-y divide-brand-border">
+      <div id="faq-list-container" class="divide-y divide-brand-border">
         
-        <div class="py-6">
-          <button onclick="toggleFaq(this)" class="w-full text-left font-bold text-brand-black text-base flex justify-between items-center group">
-            <span class="group-hover:text-brand-blue transition">출석만 해도 정말 최대 270만 원을 받을 수 있나요?</span>
-            <i class="fa-solid fa-plus text-xs text-brand-muted transition-transform"></i>
-          </button>
+        <div class="py-6 faq-item" data-faq-id="1">
+          <div class="flex items-start justify-between gap-4">
+            <button onclick="toggleFaq(this)" class="w-full text-left font-bold text-brand-black text-base flex justify-between items-center group">
+              <span class="faq-question-text group-hover:text-brand-blue transition">출석만 해도 정말 최대 270만 원을 받을 수 있나요?</span>
+              <i class="fa-solid fa-plus text-xs text-brand-muted transition-transform"></i>
+            </button>
+            <div class="admin-faq-controls hidden flex-shrink-0 flex items-center gap-2">
+              <button onclick="editFaqItem(1)" class="p-1.5 text-xs text-brand-muted hover:text-brand-blue" title="수정"><i class="fa-solid fa-pen"></i></button>
+              <button onclick="deleteFaqItem(1)" class="p-1.5 text-xs text-brand-muted hover:text-rose-500" title="삭제"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </div>
           <div class="faq-answer hidden text-xs sm:text-sm text-brand-muted leading-relaxed mt-4">
-            네, 맞습니다! 각 트랙별 출석률 80% 이상 충족 시 초급 60만 원, 중급 90만 원, 고급 120만 원이 본인 명의 계좌로 입금되며, 3개 과정을 연속 수강하여 완주하시면 <strong>최대 270만 원 전액</strong>을 수혜 받으실 수 있습니다.
+            <span class="faq-answer-text">네, 맞습니다! 각 트랙별 출석률 80% 이상 충족 시 초급 60만 원, 중급 90만 원, 고급 120만 원이 본인 명의 계좌로 입금되며, 3개 과정을 연속 수강하여 완주하시면 <strong>최대 270만 원 전액</strong>을 수혜 받으실 수 있습니다.</span>
           </div>
         </div>
 
-        <div class="py-6">
-          <button onclick="toggleFaq(this)" class="w-full text-left font-bold text-brand-black text-base flex justify-between items-center group">
-            <span class="group-hover:text-brand-blue transition">트랙 중복 신청은 어떻게 가능한가요?</span>
-            <i class="fa-solid fa-plus text-xs text-brand-muted transition-transform"></i>
-          </button>
+        <div class="py-6 faq-item" data-faq-id="2">
+          <div class="flex items-start justify-between gap-4">
+            <button onclick="toggleFaq(this)" class="w-full text-left font-bold text-brand-black text-base flex justify-between items-center group">
+              <span class="faq-question-text group-hover:text-brand-blue transition">트랙 중복 신청은 어떻게 가능한가요?</span>
+              <i class="fa-solid fa-plus text-xs text-brand-muted transition-transform"></i>
+            </button>
+            <div class="admin-faq-controls hidden flex-shrink-0 flex items-center gap-2">
+              <button onclick="editFaqItem(2)" class="p-1.5 text-xs text-brand-muted hover:text-brand-blue" title="수정"><i class="fa-solid fa-pen"></i></button>
+              <button onclick="deleteFaqItem(2)" class="p-1.5 text-xs text-brand-muted hover:text-rose-500" title="삭제"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </div>
           <div class="faq-answer hidden text-xs sm:text-sm text-brand-muted leading-relaxed mt-4">
-            [초급+중급], [중급+고급], [초급+중급+고급] 형태의 연속 과정은 모두 중복 신청이 가능합니다. 단, 교육 난이도 연계상 [초급 ➔ 고급] 직행 신청은 제한됩니다.
+            <span class="faq-answer-text">[초급+중급], [중급+고급], [초급+중급+고급] 형태의 연속 과정은 모두 중복 신청이 가능합니다. 단, 교육 난이도 연계상 [초급 ➔ 고급] 직행 신청은 제한됩니다.</span>
           </div>
         </div>
 
-        <div class="py-6">
-          <button onclick="toggleFaq(this)" class="w-full text-left font-bold text-brand-black text-base flex justify-between items-center group">
-            <span class="group-hover:text-brand-blue transition">성산 플레이스 캠프 호텔 합숙은 개인이 부담하는 비용이 있나요?</span>
-            <i class="fa-solid fa-plus text-xs text-brand-muted transition-transform"></i>
-          </button>
+        <div class="py-6 faq-item" data-faq-id="3">
+          <div class="flex items-start justify-between gap-4">
+            <button onclick="toggleFaq(this)" class="w-full text-left font-bold text-brand-black text-base flex justify-between items-center group">
+              <span class="faq-question-text group-hover:text-brand-blue transition">성산 플레이스 캠프 호텔 합숙은 개인이 부담하는 비용이 있나요?</span>
+              <i class="fa-solid fa-plus text-xs text-brand-muted transition-transform"></i>
+            </button>
+            <div class="admin-faq-controls hidden flex-shrink-0 flex items-center gap-2">
+              <button onclick="editFaqItem(3)" class="p-1.5 text-xs text-brand-muted hover:text-brand-blue" title="수정"><i class="fa-solid fa-pen"></i></button>
+              <button onclick="deleteFaqItem(3)" class="p-1.5 text-xs text-brand-muted hover:text-rose-500" title="삭제"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </div>
           <div class="faq-answer hidden text-xs sm:text-sm text-brand-muted leading-relaxed mt-4">
-            개인 부담금은 0원입니다. 고급 트랙 선발생 전원 2주간 호텔 1인 1실 및 식사가 100% 국비 지원으로 무료 제공됩니다.
+            <span class="faq-answer-text">개인 부담금은 0원입니다. 고급 트랙 선발생 전원 2주간 호텔 1인 1실 및 식사가 100% 국비 지원으로 무료 제공됩니다.</span>
           </div>
         </div>
 
-        <div class="py-6">
-          <button onclick="toggleFaq(this)" class="w-full text-left font-bold text-brand-black text-base flex justify-between items-center group">
-            <span class="group-hover:text-brand-blue transition">코딩이나 컴퓨터 지식이 전혀 없는 비전공자도 가능한가요?</span>
-            <i class="fa-solid fa-plus text-xs text-brand-muted transition-transform"></i>
-          </button>
+        <div class="py-6 faq-item" data-faq-id="4">
+          <div class="flex items-start justify-between gap-4">
+            <button onclick="toggleFaq(this)" class="w-full text-left font-bold text-brand-black text-base flex justify-between items-center group">
+              <span class="faq-question-text group-hover:text-brand-blue transition">코딩이나 컴퓨터 지식이 전혀 없는 비전공자도 가능한가요?</span>
+              <i class="fa-solid fa-plus text-xs text-brand-muted transition-transform"></i>
+            </button>
+            <div class="admin-faq-controls hidden flex-shrink-0 flex items-center gap-2">
+              <button onclick="editFaqItem(4)" class="p-1.5 text-xs text-brand-muted hover:text-brand-blue" title="수정"><i class="fa-solid fa-pen"></i></button>
+              <button onclick="deleteFaqItem(4)" class="p-1.5 text-xs text-brand-muted hover:text-rose-500" title="삭제"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </div>
           <div class="faq-answer hidden text-xs sm:text-sm text-brand-muted leading-relaxed mt-4">
-            네! 초급 트랙(메가존클라우드)은 복잡한 개발 프로그램 설치 없이 웹 브라우저 GUI 환경에서 실습합니다. 비전공자 맞춤 1:1 세팅과 코칭으로 부담 없이 시작하실 수 있습니다.
+            <span class="faq-answer-text">네! 초급 트랙(메가존클라우드)은 복잡한 개발 프로그램 설치 없이 웹 브라우저 GUI 환경에서 실습합니다. 비전공자 맞춤 1:1 세팅과 코칭으로 부담 없이 시작하실 수 있습니다.</span>
           </div>
         </div>
 
@@ -636,14 +668,48 @@
     </div>
   </section>
 
+  <!-- ==================== ADMIN ADD / EDIT FAQ MODAL ==================== -->
+  <div id="admin-faq-modal" class="fixed inset-0 z-[110] bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-2xl border border-brand-border">
+      <div class="flex items-center justify-between mb-4">
+        <h3 id="admin-faq-modal-title" class="font-bold text-brand-black text-base">새 질문 추가</h3>
+        <button onclick="closeFaqModal()" class="text-brand-muted hover:text-brand-black text-lg">&times;</button>
+      </div>
+
+      <form onsubmit="handleSaveFaq(event)" class="space-y-4">
+        <input type="hidden" id="admin-faq-target-id" value="">
+        <div>
+          <label class="block text-xs font-semibold text-brand-black mb-1">질문 (Question)</label>
+          <input type="text" id="admin-faq-q-input" placeholder="예: 졸업생이나 휴학생도 신청 가능한가요?" 
+                 class="w-full px-4 py-2.5 text-sm rounded-xl border border-brand-border focus:border-brand-blue focus:outline-none focus:ring-1 focus:ring-brand-blue" required>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-brand-black mb-1">답변 (Answer)</label>
+          <textarea id="admin-faq-a-input" rows="4" placeholder="답변 내용을 작성하세요..." 
+                    class="w-full px-4 py-2.5 text-sm rounded-xl border border-brand-border focus:border-brand-blue focus:outline-none focus:ring-1 focus:ring-brand-blue resize-none" required></textarea>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2">
+          <button type="button" onclick="closeFaqModal()" class="px-4 py-2 text-xs font-medium text-brand-muted hover:text-brand-black rounded-lg">
+            취소
+          </button>
+          <button type="submit" class="px-5 py-2 text-xs font-semibold text-white bg-brand-blue hover:bg-blue-600 rounded-lg shadow-sm">
+            저장하기
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- ==================== MINIMAL FOOTER ==================== -->
   <footer class="bg-white border-t border-brand-border py-16 text-brand-muted text-xs">
     <div class="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col md:flex-row items-center justify-between gap-6">
       
       <div class="space-y-1 text-center md:text-left">
-        <div class="font-bold text-brand-black text-sm">2026 제주 청년도약 AI 부트캠프 운영사무국</div>
-        <p>주관: 제주대학교 AI융합원 | 운영: 메가존클라우드, (주)아이코어이앤씨</p>
-        <p>문의: ai@jeju.ac.kr | TEL: 064-000-0000</p>
+        <div data-editable="footer-title" class="font-bold text-brand-black text-sm">2026 제주 청년도약 AI 부트캠프 운영사무국</div>
+        <p data-editable="footer-org">주관: 제주대학교 AI융합원 | 운영: 메가존클라우드, (주)아이코어이앤씨</p>
+        <p data-editable="footer-contact">문의: ai@jeju.ac.kr | TEL: 064-000-0000</p>
       </div>
 
       <div class="flex flex-wrap items-center gap-6 sm:gap-8 text-xs grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all">
@@ -659,10 +725,117 @@
         <img src="assets/logo_jeju.png" alt="제주대학교" class="h-6 w-auto object-contain">
         <img src="assets/logo_megazone.png" alt="메가존소프트" class="h-5 w-auto object-contain">
         <img src="assets/logo_icore_light.png?v=2" alt="아이코어이앤씨" class="h-6 w-auto object-contain">
+        
+        <!-- Secret Lock Trigger -->
+        <button id="admin-trigger-btn" onclick="openAdminModal()" title="시크릿 관리자 모드 (단축키: Ctrl+Shift+A)" class="opacity-30 hover:opacity-100 transition p-1.5 rounded text-neutral-400 hover:text-brand-blue">
+          <i class="fa-solid fa-lock text-xs"></i>
+        </button>
       </div>
 
     </div>
   </footer>
+
+  <!-- ==================== SECRET ADMIN FLOATING TOOLBAR ==================== -->
+  <div id="admin-toolbar" class="fixed top-0 inset-x-0 z-[100] bg-neutral-900 text-white px-4 py-2.5 shadow-2xl flex flex-wrap items-center justify-between gap-3 text-xs border-b border-neutral-700 hidden">
+    <div class="flex items-center gap-2">
+      <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+      <span class="font-bold tracking-tight text-neutral-200">🔧 관리자 수정 모드 활성화됨</span>
+      <span class="hidden sm:inline text-neutral-400">| 화면 속 텍스트를 클릭하여 바로 수정하세요</span>
+    </div>
+    
+    <div class="flex items-center gap-2">
+      <button onclick="saveAllEdits()" class="px-3 py-1.5 rounded bg-emerald-600 hover:bg-emerald-500 font-semibold text-white transition flex items-center gap-1.5 shadow-sm">
+        <i class="fa-solid fa-floppy-disk text-xs"></i>
+        <span>수정사항 저장</span>
+      </button>
+
+      <button onclick="exportUpdatedHtml()" class="px-3 py-1.5 rounded bg-blue-600 hover:bg-blue-500 font-semibold text-white transition flex items-center gap-1.5 shadow-sm">
+        <i class="fa-solid fa-file-arrow-down text-xs"></i>
+        <span>수정본 HTML 내보내기</span>
+      </button>
+
+      <button onclick="openChangePwModal()" class="px-3 py-1.5 rounded bg-neutral-800 hover:bg-neutral-700 text-neutral-300 transition flex items-center gap-1.5">
+        <i class="fa-solid fa-key text-xs"></i>
+        <span>비밀번호 변경</span>
+      </button>
+
+      <button onclick="exitAdminMode()" class="px-3 py-1.5 rounded bg-rose-900/80 hover:bg-rose-800 text-rose-200 transition flex items-center gap-1.5">
+        <i class="fa-solid fa-arrow-right-from-bracket text-xs"></i>
+        <span>관리자 종료</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ==================== ADMIN LOGIN MODAL ==================== -->
+  <div id="admin-login-modal" class="fixed inset-0 z-[110] bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-sm w-full shadow-2xl border border-brand-border">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-9 h-9 rounded-full bg-blue-50 text-brand-blue flex items-center justify-center">
+          <i class="fa-solid fa-shield-halved text-sm"></i>
+        </div>
+        <div>
+          <h3 class="font-bold text-brand-black text-base">시크릿 관리자 모드</h3>
+          <p class="text-xs text-brand-muted">관리자 비밀번호를 입력해주세요</p>
+        </div>
+      </div>
+
+      <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+        <div>
+          <input type="password" id="admin-password-input" placeholder="비밀번호 입력 (기본: admin1234)" 
+                 class="w-full px-4 py-2.5 text-sm rounded-xl border border-brand-border focus:border-brand-blue focus:outline-none focus:ring-1 focus:ring-brand-blue" required autofocus>
+          <p id="admin-login-error" class="text-rose-500 text-xs mt-1.5 hidden">비밀번호가 올바르지 않습니다.</p>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2">
+          <button type="button" onclick="closeAdminModal()" class="px-4 py-2 text-xs font-medium text-brand-muted hover:text-brand-black rounded-lg">
+            취소
+          </button>
+          <button type="submit" class="px-5 py-2 text-xs font-semibold text-white bg-brand-black hover:bg-neutral-800 rounded-lg shadow-sm">
+            로그인
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== ADMIN CHANGE PASSWORD MODAL ==================== -->
+  <div id="admin-pw-modal" class="fixed inset-0 z-[110] bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-sm w-full shadow-2xl border border-brand-border">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-9 h-9 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center">
+          <i class="fa-solid fa-key text-sm"></i>
+        </div>
+        <div>
+          <h3 class="font-bold text-brand-black text-base">관리자 비밀번호 변경</h3>
+          <p class="text-xs text-brand-muted">새로 사용할 비밀번호를 설정하세요</p>
+        </div>
+      </div>
+
+      <form onsubmit="handleAdminChangePassword(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-medium text-brand-muted mb-1">새 비밀번호</label>
+          <input type="password" id="admin-new-pw" placeholder="새 비밀번호 입력" 
+                 class="w-full px-4 py-2.5 text-sm rounded-xl border border-brand-border focus:border-brand-blue focus:outline-none focus:ring-1 focus:ring-brand-blue" required minlength="4">
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-brand-muted mb-1">새 비밀번호 확인</label>
+          <input type="password" id="admin-new-pw-confirm" placeholder="새 비밀번호 다시 입력" 
+                 class="w-full px-4 py-2.5 text-sm rounded-xl border border-brand-border focus:border-brand-blue focus:outline-none focus:ring-1 focus:ring-brand-blue" required minlength="4">
+          <p id="admin-pw-error" class="text-rose-500 text-xs mt-1.5 hidden">비밀번호가 일치하지 않습니다.</p>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2">
+          <button type="button" onclick="closeChangePwModal()" class="px-4 py-2 text-xs font-medium text-brand-muted hover:text-brand-black rounded-lg">
+            취소
+          </button>
+          <button type="submit" class="px-5 py-2 text-xs font-semibold text-white bg-brand-black hover:bg-neutral-800 rounded-lg shadow-sm">
+            변경 완료
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <!-- Custom Script -->
   <script src="script.js"></script>

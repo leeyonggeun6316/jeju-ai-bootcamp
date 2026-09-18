@@ -366,30 +366,345 @@ function resetQuiz() {
 
 // ==================== 5. MINIMALIST FAQ ACCORDION TOGGLE ====================
 function toggleFaq(button) {
-  const answer = button.parentElement.querySelector(".faq-answer");
+  const container = button.closest(".faq-item") || button.parentElement;
+  const answer = container.querySelector(".faq-answer");
   const icon = button.querySelector("i");
+  if (!answer) return;
   const isHidden = answer.classList.contains("hidden");
 
   document.querySelectorAll(".faq-answer").forEach(el => el.classList.add("hidden"));
-  document.querySelectorAll("#faq i").forEach(el => {
+  document.querySelectorAll("#faq-list-container i.fa-minus").forEach(el => {
     el.classList.remove("fa-minus");
     el.classList.add("fa-plus");
   });
 
   if (isHidden) {
     answer.classList.remove("hidden");
-    icon.classList.remove("fa-plus");
-    icon.classList.add("fa-minus");
+    if (icon) {
+      icon.classList.remove("fa-plus");
+      icon.classList.add("fa-minus");
+    }
   } else {
     answer.classList.add("hidden");
-    icon.classList.remove("fa-minus");
-    icon.classList.add("fa-plus");
+    if (icon) {
+      icon.classList.remove("fa-minus");
+      icon.classList.add("fa-plus");
+    }
   }
 }
+
+// ==================== 6. SECRET ADMIN MODE ENGINE ====================
+let isAdminActive = false;
+
+// Default FAQs
+const defaultFaqs = [
+  {
+    id: 1,
+    q: "출석만 해도 정말 최대 270만 원을 받을 수 있나요?",
+    a: "네, 맞습니다! 각 트랙별 출석률 80% 이상 충족 시 초급 60만 원, 중급 90만 원, 고급 120만 원이 본인 명의 계좌로 입금되며, 3개 과정을 연속 수강하여 완주하시면 최대 270만 원 전액을 수혜 받으실 수 있습니다."
+  },
+  {
+    id: 2,
+    q: "트랙 중복 신청은 어떻게 가능한가요?",
+    a: "[초급+중급], [중급+고급], [초급+중급+고급] 형태의 연속 과정은 모두 중복 신청이 가능합니다. 단, 교육 난이도 연계상 [초급 ➔ 고급] 직행 신청은 제한됩니다."
+  },
+  {
+    id: 3,
+    q: "성산 플레이스 캠프 호텔 합숙은 개인이 부담하는 비용이 있나요?",
+    a: "개인 부담금은 0원입니다. 고급 트랙 선발생 전원 2주간 호텔 1인 1실 및 식사가 100% 국비 지원으로 무료 제공됩니다."
+  },
+  {
+    id: 4,
+    q: "코딩이나 컴퓨터 지식이 전혀 없는 비전공자도 가능한가요?",
+    a: "네! 초급 트랙(메가존클라우드)은 복잡한 개발 프로그램 설치 없이 웹 브라우저 GUI 환경에서 실습합니다. 비전공자 맞춤 1:1 세팅과 코칭으로 부담 없이 시작하실 수 있습니다."
+  }
+];
+
+function getStoredPassword() {
+  return localStorage.getItem("jeju_admin_pw") || "admin1234";
+}
+
+function openAdminModal() {
+  const modal = document.getElementById("admin-login-modal");
+  const input = document.getElementById("admin-password-input");
+  const error = document.getElementById("admin-login-error");
+  if (modal) {
+    modal.classList.remove("hidden");
+    error.classList.add("hidden");
+    input.value = "";
+    setTimeout(() => input.focus(), 100);
+  }
+}
+
+function closeAdminModal() {
+  const modal = document.getElementById("admin-login-modal");
+  if (modal) modal.classList.add("hidden");
+}
+
+function handleAdminLogin(e) {
+  e.preventDefault();
+  const input = document.getElementById("admin-password-input");
+  const error = document.getElementById("admin-login-error");
+  const currentPw = getStoredPassword();
+
+  if (input.value === currentPw) {
+    closeAdminModal();
+    enterAdminMode();
+  } else {
+    error.classList.remove("hidden");
+    input.select();
+  }
+}
+
+function enterAdminMode() {
+  isAdminActive = true;
+  document.getElementById("admin-toolbar")?.classList.remove("hidden");
+  document.getElementById("admin-add-faq-btn")?.classList.remove("hidden");
+
+  // Show FAQ admin controls
+  document.querySelectorAll(".admin-faq-controls").forEach(el => el.classList.remove("hidden"));
+
+  // Make all data-editable fields editable
+  document.querySelectorAll("[data-editable]").forEach(el => {
+    el.setAttribute("contenteditable", "true");
+    el.classList.add("admin-editing-field");
+  });
+
+  showToast("🔧 관리자 수정 모드가 활성화되었습니다! 화면의 글자를 클릭해 수정하세요.");
+}
+
+function exitAdminMode() {
+  isAdminActive = false;
+  document.getElementById("admin-toolbar")?.classList.add("hidden");
+  document.getElementById("admin-add-faq-btn")?.classList.add("hidden");
+
+  document.querySelectorAll(".admin-faq-controls").forEach(el => el.classList.add("hidden"));
+
+  document.querySelectorAll("[data-editable]").forEach(el => {
+    el.removeAttribute("contenteditable");
+    el.classList.remove("admin-editing-field");
+  });
+
+  showToast("관리자 모드가 종료되었습니다.");
+}
+
+// Password Change
+function openChangePwModal() {
+  const modal = document.getElementById("admin-pw-modal");
+  const p1 = document.getElementById("admin-new-pw");
+  const p2 = document.getElementById("admin-new-pw-confirm");
+  const error = document.getElementById("admin-pw-error");
+  if (modal) {
+    modal.classList.remove("hidden");
+    p1.value = "";
+    p2.value = "";
+    error.classList.add("hidden");
+    setTimeout(() => p1.focus(), 100);
+  }
+}
+
+function closeChangePwModal() {
+  document.getElementById("admin-pw-modal")?.classList.add("hidden");
+}
+
+function handleAdminChangePassword(e) {
+  e.preventDefault();
+  const p1 = document.getElementById("admin-new-pw").value;
+  const p2 = document.getElementById("admin-new-pw-confirm").value;
+  const error = document.getElementById("admin-pw-error");
+
+  if (p1 !== p2) {
+    error.classList.remove("hidden");
+    return;
+  }
+
+  localStorage.setItem("jeju_admin_pw", p1);
+  closeChangePwModal();
+  showToast("🔑 관리자 비밀번호가 성공적으로 변경되었습니다!");
+}
+
+// Text Edits Save & Load
+function saveAllEdits() {
+  const edits = {};
+  document.querySelectorAll("[data-editable]").forEach(el => {
+    const key = el.getAttribute("data-editable");
+    edits[key] = el.innerHTML;
+  });
+
+  localStorage.setItem("jeju_bootcamp_edits", JSON.stringify(edits));
+  showToast("💾 모든 수정사항이 브라우저에 안전하게 저장되었습니다!");
+}
+
+function loadSavedEdits() {
+  try {
+    const saved = localStorage.getItem("jeju_bootcamp_edits");
+    if (!saved) return;
+    const edits = JSON.parse(saved);
+    Object.keys(edits).forEach(key => {
+      const el = document.querySelector(`[data-editable="${key}"]`);
+      if (el) {
+        el.innerHTML = edits[key];
+      }
+    });
+  } catch (err) {
+    console.error("Error loading saved edits:", err);
+  }
+}
+
+// FAQ Management
+function getStoredFaqs() {
+  try {
+    const raw = localStorage.getItem("jeju_bootcamp_faqs");
+    return raw ? JSON.parse(raw) : defaultFaqs;
+  } catch (e) {
+    return defaultFaqs;
+  }
+}
+
+function saveFaqs(faqs) {
+  localStorage.setItem("jeju_bootcamp_faqs", JSON.stringify(faqs));
+}
+
+function renderFaqs() {
+  const container = document.getElementById("faq-list-container");
+  if (!container) return;
+
+  const faqs = getStoredFaqs();
+  container.innerHTML = faqs.map(faq => `
+    <div class="py-6 faq-item" data-faq-id="${faq.id}">
+      <div class="flex items-start justify-between gap-4">
+        <button onclick="toggleFaq(this)" class="w-full text-left font-bold text-brand-black text-base flex justify-between items-center group">
+          <span class="faq-question-text group-hover:text-brand-blue transition">${faq.q}</span>
+          <i class="fa-solid fa-plus text-xs text-brand-muted transition-transform"></i>
+        </button>
+        <div class="admin-faq-controls ${isAdminActive ? "" : "hidden"} flex-shrink-0 flex items-center gap-2">
+          <button onclick="editFaqItem(${faq.id})" class="p-1.5 text-xs text-brand-muted hover:text-brand-blue" title="수정"><i class="fa-solid fa-pen"></i></button>
+          <button onclick="deleteFaqItem(${faq.id})" class="p-1.5 text-xs text-brand-muted hover:text-rose-500" title="삭제"><i class="fa-solid fa-trash"></i></button>
+        </div>
+      </div>
+      <div class="faq-answer hidden text-xs sm:text-sm text-brand-muted leading-relaxed mt-4">
+        <span class="faq-answer-text">${faq.a}</span>
+      </div>
+    </div>
+  `).join("");
+}
+
+function openAddFaqModal() {
+  const modal = document.getElementById("admin-faq-modal");
+  document.getElementById("admin-faq-modal-title").textContent = "새 FAQ 질문 추가";
+  document.getElementById("admin-faq-target-id").value = "";
+  document.getElementById("admin-faq-q-input").value = "";
+  document.getElementById("admin-faq-a-input").value = "";
+  modal?.classList.remove("hidden");
+}
+
+function editFaqItem(id) {
+  const faqs = getStoredFaqs();
+  const item = faqs.find(f => f.id === id);
+  if (!item) return;
+
+  const modal = document.getElementById("admin-faq-modal");
+  document.getElementById("admin-faq-modal-title").textContent = "FAQ 질문 수정";
+  document.getElementById("admin-faq-target-id").value = item.id;
+  document.getElementById("admin-faq-q-input").value = item.q;
+  document.getElementById("admin-faq-a-input").value = item.a;
+  modal?.classList.remove("hidden");
+}
+
+function closeFaqModal() {
+  document.getElementById("admin-faq-modal")?.classList.add("hidden");
+}
+
+function handleSaveFaq(e) {
+  e.preventDefault();
+  const idVal = document.getElementById("admin-faq-target-id").value;
+  const q = document.getElementById("admin-faq-q-input").value.trim();
+  const a = document.getElementById("admin-faq-a-input").value.trim();
+
+  let faqs = getStoredFaqs();
+  if (idVal) {
+    const id = parseInt(idVal, 10);
+    faqs = faqs.map(f => f.id === id ? { ...f, q, a } : f);
+    showToast("FAQ 질문이 수정되었습니다.");
+  } else {
+    const newId = Date.now();
+    faqs.push({ id: newId, q, a });
+    showToast("새 FAQ 질문이 추가되었습니다.");
+  }
+
+  saveFaqs(faqs);
+  renderFaqs();
+  closeFaqModal();
+}
+
+function deleteFaqItem(id) {
+  if (!confirm("정말 이 질문을 삭제하시겠습니까?")) return;
+  let faqs = getStoredFaqs();
+  faqs = faqs.filter(f => f.id !== id);
+  saveFaqs(faqs);
+  renderFaqs();
+  showToast("FAQ 질문이 삭제되었습니다.");
+}
+
+// Export Updated HTML for Deployment
+function exportUpdatedHtml() {
+  saveAllEdits();
+  // Temporarily disable admin toolbar and edit outlines before cloning
+  exitAdminMode();
+
+  const fullHtml = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+  const blob = new Blob([fullHtml], { type: "text/html;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "index.html";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  // Re-enter admin mode
+  enterAdminMode();
+  showToast("📥 최신 수정본 index.html 다운로드가 완료되었습니다!");
+}
+
+// Lightweight Toast Notification
+function showToast(msg) {
+  let toast = document.getElementById("admin-toast");
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "admin-toast";
+    toast.className = "fixed bottom-6 right-6 z-[200] bg-neutral-900 text-white px-5 py-3 rounded-xl shadow-2xl text-xs font-semibold flex items-center gap-2 border border-neutral-700 transition-all duration-300 transform translate-y-12 opacity-0 pointer-events-none";
+    document.body.appendChild(toast);
+  }
+  toast.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400"></i> <span>${msg}</span>`;
+  toast.classList.remove("translate-y-12", "opacity-0");
+  toast.classList.add("translate-y-0", "opacity-100");
+
+  setTimeout(() => {
+    toast.classList.remove("translate-y-0", "opacity-100");
+    toast.classList.add("translate-y-12", "opacity-0");
+  }, 3200);
+}
+
+// Keyboard Shortcut: Ctrl + Shift + A
+document.addEventListener("keydown", (e) => {
+  if (e.ctrlKey && e.shiftKey && (e.key === "A" || e.key === "a")) {
+    e.preventDefault();
+    if (isAdminActive) {
+      exitAdminMode();
+    } else {
+      openAdminModal();
+    }
+  }
+});
 
 // Initialize All Systems
 document.addEventListener("DOMContentLoaded", () => {
   initAntigravityParticles();
   initCountdown();
   initSlider();
+  renderFaqs();
+  loadSavedEdits();
 });
+
