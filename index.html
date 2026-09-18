@@ -669,7 +669,7 @@
   </section>
 
   <!-- ==================== ADMIN ADD / EDIT FAQ MODAL ==================== -->
-  <div id="admin-faq-modal" class="fixed inset-0 z-[110] bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+  <div id="admin-faq-modal" style="display: none;" class="fixed inset-0 z-[110] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-2xl border border-brand-border">
       <div class="flex items-center justify-between mb-4">
         <h3 id="admin-faq-modal-title" class="font-bold text-brand-black text-base">새 질문 추가</h3>
@@ -726,17 +726,25 @@
         <img src="assets/logo_megazone.png" alt="메가존소프트" class="h-5 w-auto object-contain">
         <img src="assets/logo_icore_light.png?v=2" alt="아이코어이앤씨" class="h-6 w-auto object-contain">
         
-        <!-- Secret Lock Trigger -->
-        <button id="admin-trigger-btn" onclick="openAdminModal()" title="시크릿 관리자 모드 (단축키: Ctrl+Shift+A)" class="opacity-30 hover:opacity-100 transition p-1.5 rounded text-neutral-400 hover:text-brand-blue">
+        <!-- Secret Lock Trigger in Footer -->
+        <button id="admin-trigger-btn" onclick="openAdminModal()" title="관리자 모드 열기" class="opacity-60 hover:opacity-100 transition p-2 bg-neutral-100 hover:bg-neutral-200 rounded-full text-neutral-700 hover:text-brand-blue flex items-center gap-1.5 shadow-sm">
           <i class="fa-solid fa-lock text-xs"></i>
+          <span class="text-[11px] font-medium hidden sm:inline">관리자</span>
         </button>
       </div>
 
     </div>
   </footer>
 
+  <!-- ==================== FLOATING ADMIN QUICK LAUNCHER ==================== -->
+  <button id="floating-admin-launcher" onclick="openAdminModal()" title="관리자 모드 열기 (Alt+A)" 
+          class="fixed bottom-6 left-6 z-50 p-2.5 rounded-full bg-white/90 hover:bg-white text-neutral-600 hover:text-brand-blue border border-brand-border shadow-md hover:shadow-lg transition-all flex items-center gap-2 group backdrop-blur-sm">
+    <i class="fa-solid fa-gear text-sm group-hover:rotate-45 transition-transform duration-300"></i>
+    <span class="text-xs font-semibold pr-1">관리자 모드</span>
+  </button>
+
   <!-- ==================== SECRET ADMIN FLOATING TOOLBAR ==================== -->
-  <div id="admin-toolbar" class="fixed top-0 inset-x-0 z-[100] bg-neutral-900 text-white px-4 py-2.5 shadow-2xl flex flex-wrap items-center justify-between gap-3 text-xs border-b border-neutral-700 hidden">
+  <div id="admin-toolbar" style="display: none;" class="fixed top-0 inset-x-0 z-[100] bg-neutral-900 text-white px-4 py-2.5 shadow-2xl flex flex-wrap items-center justify-between gap-3 text-xs border-b border-neutral-700">
     <div class="flex items-center gap-2">
       <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
       <span class="font-bold tracking-tight text-neutral-200">🔧 관리자 수정 모드 활성화됨</span>
@@ -767,7 +775,7 @@
   </div>
 
   <!-- ==================== ADMIN LOGIN MODAL ==================== -->
-  <div id="admin-login-modal" class="fixed inset-0 z-[110] bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+  <div id="admin-login-modal" style="display: none;" class="fixed inset-0 z-[110] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-sm w-full shadow-2xl border border-brand-border">
       <div class="flex items-center gap-3 mb-4">
         <div class="w-9 h-9 rounded-full bg-blue-50 text-brand-blue flex items-center justify-center">
@@ -783,7 +791,7 @@
         <div>
           <input type="password" id="admin-password-input" placeholder="비밀번호 입력 (기본: admin1234)" 
                  class="w-full px-4 py-2.5 text-sm rounded-xl border border-brand-border focus:border-brand-blue focus:outline-none focus:ring-1 focus:ring-brand-blue" required autofocus>
-          <p id="admin-login-error" class="text-rose-500 text-xs mt-1.5 hidden">비밀번호가 올바르지 않습니다.</p>
+          <p id="admin-login-error" style="display: none;" class="text-rose-500 text-xs mt-1.5">비밀번호가 올바르지 않습니다.</p>
         </div>
 
         <div class="flex items-center justify-end gap-2 pt-2">
@@ -799,7 +807,7 @@
   </div>
 
   <!-- ==================== ADMIN CHANGE PASSWORD MODAL ==================== -->
-  <div id="admin-pw-modal" class="fixed inset-0 z-[110] bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+  <div id="admin-pw-modal" style="display: none;" class="fixed inset-0 z-[110] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-sm w-full shadow-2xl border border-brand-border">
       <div class="flex items-center gap-3 mb-4">
         <div class="w-9 h-9 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center">
@@ -822,7 +830,7 @@
           <label class="block text-xs font-medium text-brand-muted mb-1">새 비밀번호 확인</label>
           <input type="password" id="admin-new-pw-confirm" placeholder="새 비밀번호 다시 입력" 
                  class="w-full px-4 py-2.5 text-sm rounded-xl border border-brand-border focus:border-brand-blue focus:outline-none focus:ring-1 focus:ring-brand-blue" required minlength="4">
-          <p id="admin-pw-error" class="text-rose-500 text-xs mt-1.5 hidden">비밀번호가 일치하지 않습니다.</p>
+          <p id="admin-pw-error" style="display: none;" class="text-rose-500 text-xs mt-1.5">비밀번호가 일치하지 않습니다.</p>
         </div>
 
         <div class="flex items-center justify-end gap-2 pt-2">
@@ -837,7 +845,7 @@
     </div>
   </div>
 
-  <!-- Custom Script -->
-  <script src="script.js"></script>
+  <!-- Custom Script with Cache Busting -->
+  <script src="script.js?v=20260918_v3"></script>
 </body>
 </html>

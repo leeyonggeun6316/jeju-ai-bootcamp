@@ -429,16 +429,18 @@ function openAdminModal() {
   const input = document.getElementById("admin-password-input");
   const error = document.getElementById("admin-login-error");
   if (modal) {
-    modal.classList.remove("hidden");
-    error.classList.add("hidden");
-    input.value = "";
-    setTimeout(() => input.focus(), 100);
+    modal.style.display = "flex";
+    if (error) error.style.display = "none";
+    if (input) {
+      input.value = "";
+      setTimeout(() => input.focus(), 100);
+    }
   }
 }
 
 function closeAdminModal() {
   const modal = document.getElementById("admin-login-modal");
-  if (modal) modal.classList.add("hidden");
+  if (modal) modal.style.display = "none";
 }
 
 function handleAdminLogin(e) {
@@ -451,15 +453,18 @@ function handleAdminLogin(e) {
     closeAdminModal();
     enterAdminMode();
   } else {
-    error.classList.remove("hidden");
+    if (error) error.style.display = "block";
     input.select();
   }
 }
 
 function enterAdminMode() {
   isAdminActive = true;
-  document.getElementById("admin-toolbar")?.classList.remove("hidden");
-  document.getElementById("admin-add-faq-btn")?.classList.remove("hidden");
+  const toolbar = document.getElementById("admin-toolbar");
+  if (toolbar) toolbar.style.display = "flex";
+
+  const addFaqBtn = document.getElementById("admin-add-faq-btn");
+  if (addFaqBtn) addFaqBtn.classList.remove("hidden");
 
   // Show FAQ admin controls
   document.querySelectorAll(".admin-faq-controls").forEach(el => el.classList.remove("hidden"));
@@ -475,8 +480,11 @@ function enterAdminMode() {
 
 function exitAdminMode() {
   isAdminActive = false;
-  document.getElementById("admin-toolbar")?.classList.add("hidden");
-  document.getElementById("admin-add-faq-btn")?.classList.add("hidden");
+  const toolbar = document.getElementById("admin-toolbar");
+  if (toolbar) toolbar.style.display = "none";
+
+  const addFaqBtn = document.getElementById("admin-add-faq-btn");
+  if (addFaqBtn) addFaqBtn.classList.add("hidden");
 
   document.querySelectorAll(".admin-faq-controls").forEach(el => el.classList.add("hidden"));
 
@@ -495,16 +503,17 @@ function openChangePwModal() {
   const p2 = document.getElementById("admin-new-pw-confirm");
   const error = document.getElementById("admin-pw-error");
   if (modal) {
-    modal.classList.remove("hidden");
-    p1.value = "";
-    p2.value = "";
-    error.classList.add("hidden");
-    setTimeout(() => p1.focus(), 100);
+    modal.style.display = "flex";
+    if (p1) p1.value = "";
+    if (p2) p2.value = "";
+    if (error) error.style.display = "none";
+    setTimeout(() => p1 && p1.focus(), 100);
   }
 }
 
 function closeChangePwModal() {
-  document.getElementById("admin-pw-modal")?.classList.add("hidden");
+  const modal = document.getElementById("admin-pw-modal");
+  if (modal) modal.style.display = "none";
 }
 
 function handleAdminChangePassword(e) {
@@ -514,7 +523,7 @@ function handleAdminChangePassword(e) {
   const error = document.getElementById("admin-pw-error");
 
   if (p1 !== p2) {
-    error.classList.remove("hidden");
+    if (error) error.style.display = "block";
     return;
   }
 
@@ -595,7 +604,7 @@ function openAddFaqModal() {
   document.getElementById("admin-faq-target-id").value = "";
   document.getElementById("admin-faq-q-input").value = "";
   document.getElementById("admin-faq-a-input").value = "";
-  modal?.classList.remove("hidden");
+  if (modal) modal.style.display = "flex";
 }
 
 function editFaqItem(id) {
@@ -608,11 +617,12 @@ function editFaqItem(id) {
   document.getElementById("admin-faq-target-id").value = item.id;
   document.getElementById("admin-faq-q-input").value = item.q;
   document.getElementById("admin-faq-a-input").value = item.a;
-  modal?.classList.remove("hidden");
+  if (modal) modal.style.display = "flex";
 }
 
 function closeFaqModal() {
-  document.getElementById("admin-faq-modal")?.classList.add("hidden");
+  const modal = document.getElementById("admin-faq-modal");
+  if (modal) modal.style.display = "none";
 }
 
 function handleSaveFaq(e) {
@@ -649,7 +659,6 @@ function deleteFaqItem(id) {
 // Export Updated HTML for Deployment
 function exportUpdatedHtml() {
   saveAllEdits();
-  // Temporarily disable admin toolbar and edit outlines before cloning
   exitAdminMode();
 
   const fullHtml = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
@@ -663,7 +672,6 @@ function exportUpdatedHtml() {
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 
-  // Re-enter admin mode
   enterAdminMode();
   showToast("📥 최신 수정본 index.html 다운로드가 완료되었습니다!");
 }
@@ -687,9 +695,13 @@ function showToast(msg) {
   }, 3200);
 }
 
-// Keyboard Shortcut: Ctrl + Shift + A
+// Keyboard Shortcuts: Alt + A, Ctrl + Shift + E, Ctrl + Shift + A
 document.addEventListener("keydown", (e) => {
-  if (e.ctrlKey && e.shiftKey && (e.key === "A" || e.key === "a")) {
+  const isAltA = e.altKey && (e.key === "a" || e.key === "A" || e.code === "KeyA");
+  const isCtrlShiftE = e.ctrlKey && e.shiftKey && (e.key === "e" || e.key === "E" || e.code === "KeyE");
+  const isCtrlShiftA = e.ctrlKey && e.shiftKey && (e.key === "a" || e.key === "A" || e.code === "KeyA");
+
+  if (isAltA || isCtrlShiftE || isCtrlShiftA) {
     e.preventDefault();
     if (isAdminActive) {
       exitAdminMode();
@@ -698,6 +710,23 @@ document.addEventListener("keydown", (e) => {
     }
   }
 });
+
+// Expose functions globally to window
+window.openAdminModal = openAdminModal;
+window.closeAdminModal = closeAdminModal;
+window.handleAdminLogin = handleAdminLogin;
+window.enterAdminMode = enterAdminMode;
+window.exitAdminMode = exitAdminMode;
+window.openChangePwModal = openChangePwModal;
+window.closeChangePwModal = closeChangePwModal;
+window.handleAdminChangePassword = handleAdminChangePassword;
+window.saveAllEdits = saveAllEdits;
+window.exportUpdatedHtml = exportUpdatedHtml;
+window.openAddFaqModal = openAddFaqModal;
+window.editFaqItem = editFaqItem;
+window.deleteFaqItem = deleteFaqItem;
+window.closeFaqModal = closeFaqModal;
+window.handleSaveFaq = handleSaveFaq;
 
 // Initialize All Systems
 document.addEventListener("DOMContentLoaded", () => {
