@@ -952,6 +952,159 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
+// ==================== 8. NOTION-STYLE FLOATING TEXT FORMATTER ====================
+let isSelectingInsideEditable = false;
+
+function initFloatingFormatter() {
+  const formatter = document.getElementById("admin-floating-formatter");
+  if (!formatter) return;
+
+  function updateFormatterPosition() {
+    if (!isAdminActive) {
+      formatter.style.display = "none";
+      return;
+    }
+
+    const sel = window.getSelection();
+    if (!sel || sel.isCollapsed || !sel.rangeCount) {
+      formatter.style.display = "none";
+      hideFormatterDropdowns();
+      return;
+    }
+
+    const text = sel.toString().trim();
+    if (!text) {
+      formatter.style.display = "none";
+      hideFormatterDropdowns();
+      return;
+    }
+
+    const range = sel.getRangeAt(0);
+    const parentNode = range.commonAncestorContainer.nodeType === 3
+      ? range.commonAncestorContainer.parentElement
+      : range.commonAncestorContainer;
+
+    if (!parentNode || !parentNode.closest("[data-editable]")) {
+      formatter.style.display = "none";
+      hideFormatterDropdowns();
+      return;
+    }
+
+    const rect = range.getBoundingClientRect();
+    if (rect.width === 0 && rect.height === 0) {
+      formatter.style.display = "none";
+      return;
+    }
+
+    // Calculate position: above selection or below if not enough room on top
+    const formatterWidth = formatter.offsetWidth || 340;
+    const formatterHeight = formatter.offsetHeight || 40;
+
+    let left = rect.left + (rect.width / 2) - (formatterWidth / 2);
+    let top = rect.top - formatterHeight - 8;
+
+    // Boundary checks
+    if (top < 10) {
+      top = rect.bottom + 8; // flip to below
+    }
+    if (left < 10) left = 10;
+    if (left + formatterWidth > window.innerWidth - 10) {
+      left = window.innerWidth - formatterWidth - 10;
+    }
+
+    formatter.style.top = `${top}px`;
+    formatter.style.left = `${left}px`;
+    formatter.style.display = "flex";
+  }
+
+  document.addEventListener("mouseup", () => {
+    setTimeout(updateFormatterPosition, 10);
+  });
+
+  document.addEventListener("keyup", (e) => {
+    if (e.key === "Shift" || e.key.startsWith("Arrow")) {
+      setTimeout(updateFormatterPosition, 10);
+    }
+  });
+
+  document.addEventListener("mousedown", (e) => {
+    if (!formatter.contains(e.target) && !e.target.closest("[data-editable]")) {
+      formatter.style.display = "none";
+      hideFormatterDropdowns();
+    }
+  });
+}
+
+function hideFormatterDropdowns() {
+  const colorPalette = document.getElementById("formatter-color-palette");
+  const fontPalette = document.getElementById("formatter-font-palette");
+  if (colorPalette) colorPalette.style.display = "none";
+  if (fontPalette) fontPalette.style.display = "none";
+}
+
+function formatText(cmd) {
+  document.execCommand(cmd, false, null);
+}
+
+function changeFontSize(delta) {
+  const sel = window.getSelection();
+  if (!sel || !sel.rangeCount || sel.isCollapsed) return;
+  const range = sel.getRangeAt(0);
+
+  let currentSize = 14;
+  let parent = range.commonAncestorContainer;
+  if (parent.nodeType === 3) parent = parent.parentElement;
+  if (parent) {
+    currentSize = parseInt(window.getComputedStyle(parent).fontSize, 10) || 14;
+  }
+
+  const newSize = Math.max(10, Math.min(54, currentSize + delta));
+  const span = document.createElement("span");
+  span.style.fontSize = `${newSize}px`;
+
+  try {
+    span.appendChild(range.extractContents());
+    range.insertNode(span);
+
+    sel.removeAllRanges();
+    const newRange = document.createRange();
+    newRange.selectNodeContents(span);
+    sel.addRange(newRange);
+  } catch (e) {
+    console.error("Font size change error:", e);
+  }
+}
+
+function toggleColorPicker(e) {
+  e.stopPropagation();
+  const palette = document.getElementById("formatter-color-palette");
+  const fontPalette = document.getElementById("formatter-font-palette");
+  if (fontPalette) fontPalette.style.display = "none";
+  if (palette) {
+    palette.style.display = palette.style.display === "none" ? "flex" : "none";
+  }
+}
+
+function applyTextColor(color) {
+  document.execCommand("foreColor", false, color);
+  hideFormatterDropdowns();
+}
+
+function toggleFontPicker(e) {
+  e.stopPropagation();
+  const palette = document.getElementById("formatter-font-palette");
+  const colorPalette = document.getElementById("formatter-color-palette");
+  if (colorPalette) colorPalette.style.display = "none";
+  if (palette) {
+    palette.style.display = palette.style.display === "none" ? "flex" : "none";
+  }
+}
+
+function applyFontFamily(fontFamily) {
+  document.execCommand("fontName", false, fontFamily);
+  hideFormatterDropdowns();
+}
+
 // Expose functions globally to window
 window.openAdminModal = openAdminModal;
 window.closeAdminModal = closeAdminModal;
@@ -972,12 +1125,12 @@ window.openLinkModal = openLinkModal;
 window.closeLinkModal = closeLinkModal;
 window.handleSaveApplyLink = handleSaveApplyLink;
 window.handleApplyClick = handleApplyClick;
-window.openQuizModal = openQuizModal;
-window.openQuizModalForCurrent = openQuizModalForCurrent;
-window.closeQuizModal = closeQuizModal;
-window.switchQuizTab = switchQuizTab;
-window.handleSaveQuizData = handleSaveQuizData;
-window.renderQuizFromData = renderQuizFromData;
+window.formatText = formatText;
+window.changeFontSize = changeFontSize;
+window.toggleColorPicker = toggleColorPicker;
+window.applyTextColor = applyTextColor;
+window.toggleFontPicker = toggleFontPicker;
+window.applyFontFamily = applyFontFamily;
 
 // Initialize All Systems
 document.addEventListener("DOMContentLoaded", () => {
@@ -988,6 +1141,7 @@ document.addEventListener("DOMContentLoaded", () => {
   renderQuizFromData();
   loadSavedEdits();
   applySavedLinkSettings();
+  initFloatingFormatter();
 });
 
 

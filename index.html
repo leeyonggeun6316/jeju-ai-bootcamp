@@ -778,6 +778,91 @@
     </div>
   </div>
 
+  <!-- ==================== NOTION-STYLE FLOATING FORMATTER ==================== -->
+  <div id="admin-floating-formatter" style="display: none; top: 0; left: 0;" 
+       class="fixed z-[250] bg-neutral-900/95 backdrop-blur-md text-white p-1 rounded-2xl shadow-2xl border border-neutral-700/80 items-center gap-0.5 text-xs transition-opacity duration-150">
+    
+    <!-- Bold -->
+    <button type="button" onmousedown="event.preventDefault()" onclick="formatText('bold')" 
+            class="w-7 h-7 rounded-lg hover:bg-neutral-800 flex items-center justify-center font-bold text-neutral-200 hover:text-white transition" title="굵게 (Ctrl+B)">
+      <i class="fa-solid fa-bold text-xs"></i>
+    </button>
+
+    <!-- Italic -->
+    <button type="button" onmousedown="event.preventDefault()" onclick="formatText('italic')" 
+            class="w-7 h-7 rounded-lg hover:bg-neutral-800 flex items-center justify-center italic text-neutral-200 hover:text-white transition" title="기울임 (Ctrl+I)">
+      <i class="fa-solid fa-italic text-xs"></i>
+    </button>
+
+    <!-- Underline -->
+    <button type="button" onmousedown="event.preventDefault()" onclick="formatText('underline')" 
+            class="w-7 h-7 rounded-lg hover:bg-neutral-800 flex items-center justify-center underline text-neutral-200 hover:text-white transition" title="밑줄 (Ctrl+U)">
+      <i class="fa-solid fa-underline text-xs"></i>
+    </button>
+
+    <div class="w-px h-4 bg-neutral-700 mx-1"></div>
+
+    <!-- Font Size Down -->
+    <button type="button" onmousedown="event.preventDefault()" onclick="changeFontSize(-2)" 
+            class="px-2 h-7 rounded-lg hover:bg-neutral-800 flex items-center justify-center text-[11px] font-semibold text-neutral-300 hover:text-white transition" title="글씨 작게">
+      A-
+    </button>
+
+    <!-- Font Size Up -->
+    <button type="button" onmousedown="event.preventDefault()" onclick="changeFontSize(2)" 
+            class="px-2 h-7 rounded-lg hover:bg-neutral-800 flex items-center justify-center text-[12px] font-bold text-neutral-200 hover:text-white transition" title="글씨 크게">
+      A+
+    </button>
+
+    <div class="w-px h-4 bg-neutral-700 mx-1"></div>
+
+    <!-- Color Palette Trigger -->
+    <div class="relative">
+      <button type="button" onmousedown="event.preventDefault()" onclick="toggleColorPicker(event)" 
+              class="h-7 px-2 rounded-lg hover:bg-neutral-800 flex items-center gap-1.5 text-neutral-200 hover:text-white transition" title="글자 색상">
+        <span class="w-3.5 h-3.5 rounded-full border border-white/40 bg-gradient-to-tr from-blue-500 via-emerald-400 to-rose-400"></span>
+        <i class="fa-solid fa-chevron-down text-[9px] text-neutral-400"></i>
+      </button>
+
+      <!-- Color Dropdown -->
+      <div id="formatter-color-palette" style="display: none;" 
+           class="absolute top-full left-0 mt-1.5 bg-neutral-900 border border-neutral-700 rounded-xl p-2 shadow-2xl flex items-center gap-1.5 z-10">
+        <button type="button" onmousedown="event.preventDefault()" onclick="applyTextColor('#111827')" class="w-5 h-5 rounded-full bg-neutral-900 border border-neutral-600 hover:scale-110 transition" title="검정 (기본)"></button>
+        <button type="button" onmousedown="event.preventDefault()" onclick="applyTextColor('#2563EB')" class="w-5 h-5 rounded-full bg-blue-600 hover:scale-110 transition" title="브랜드 블루"></button>
+        <button type="button" onmousedown="event.preventDefault()" onclick="applyTextColor('#059669')" class="w-5 h-5 rounded-full bg-emerald-600 hover:scale-110 transition" title="에메랄드"></button>
+        <button type="button" onmousedown="event.preventDefault()" onclick="applyTextColor('#7C3AED')" class="w-5 h-5 rounded-full bg-purple-600 hover:scale-110 transition" title="퍼플"></button>
+        <button type="button" onmousedown="event.preventDefault()" onclick="applyTextColor('#E11D48')" class="w-5 h-5 rounded-full bg-rose-600 hover:scale-110 transition" title="로즈 레드"></button>
+        <button type="button" onmousedown="event.preventDefault()" onclick="applyTextColor('#D97706')" class="w-5 h-5 rounded-full bg-amber-600 hover:scale-110 transition" title="앰버 오렌지"></button>
+        <button type="button" onmousedown="event.preventDefault()" onclick="applyTextColor('#6B7280')" class="w-5 h-5 rounded-full bg-gray-500 hover:scale-110 transition" title="뮤티드 그레이"></button>
+      </div>
+    </div>
+
+    <!-- Font Family Dropdown Trigger -->
+    <div class="relative">
+      <button type="button" onmousedown="event.preventDefault()" onclick="toggleFontPicker(event)" 
+              class="h-7 px-2 rounded-lg hover:bg-neutral-800 flex items-center gap-1 text-[11px] text-neutral-200 hover:text-white transition" title="글꼴 변경">
+        <i class="fa-solid fa-font text-xs"></i>
+        <i class="fa-solid fa-chevron-down text-[9px] text-neutral-400"></i>
+      </button>
+
+      <!-- Font Dropdown -->
+      <div id="formatter-font-palette" style="display: none;" 
+           class="absolute top-full left-0 mt-1.5 bg-neutral-900 border border-neutral-700 rounded-xl p-1.5 shadow-2xl flex flex-col gap-1 w-28 z-10 text-xs">
+        <button type="button" onmousedown="event.preventDefault()" onclick="applyFontFamily('Pretendard, -apple-system, sans-serif')" class="px-2 py-1 text-left rounded hover:bg-neutral-800 text-neutral-200">기본 고딕</button>
+        <button type="button" onmousedown="event.preventDefault()" onclick="applyFontFamily('serif')" class="px-2 py-1 text-left rounded hover:bg-neutral-800 font-serif text-neutral-200">명조 (Serif)</button>
+        <button type="button" onmousedown="event.preventDefault()" onclick="applyFontFamily('monospace')" class="px-2 py-1 text-left rounded hover:bg-neutral-800 font-mono text-neutral-200">코딩체 (Mono)</button>
+      </div>
+    </div>
+
+    <div class="w-px h-4 bg-neutral-700 mx-1"></div>
+
+    <!-- Clear Format -->
+    <button type="button" onmousedown="event.preventDefault()" onclick="formatText('removeFormat')" 
+            class="w-7 h-7 rounded-lg hover:bg-neutral-800 flex items-center justify-center text-neutral-400 hover:text-rose-400 transition" title="서식 초기화">
+      <i class="fa-solid fa-eraser text-xs"></i>
+    </button>
+  </div>
+
   <!-- ==================== ADMIN LOGIN MODAL ==================== -->
   <div id="admin-login-modal" style="display: none;" class="fixed inset-0 z-[110] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-sm w-full shadow-2xl border border-brand-border">
@@ -895,6 +980,6 @@
   </div>
 
   <!-- Custom Script with Cache Busting -->
-  <script src="script.js?v=20260918_v7"></script>
+  <script src="script.js?v=20260918_v8"></script>
 </body>
 </html>
